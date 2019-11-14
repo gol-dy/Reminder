@@ -77,7 +77,7 @@ def createReminder():
 	insertRemind(remind_content, combined_date)
 
 
-#For viewing and deleting (specific reminder)
+# For viewing and deleting (specific reminder)
 def viewRemind(rec=0):
 	if rec == 0:
 		os.system('clear')
