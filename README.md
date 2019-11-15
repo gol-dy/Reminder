@@ -1,2 +1,2 @@
-# remind-me
+# Reminder
 Simple Reminder
