@@ -83,8 +83,8 @@ def viewRemind(rec=0): # For viewing and deleting (specific reminder)
 
 def updateReminder(): # Updation of TASKS already exist
 	current_year = datetime.now().year
-	print('DONT NEED TO UPDATE ??? ')
-	task_id = input('TASK U NEED TO UPDATE (ID) ')
+	viewRemind()
+	task_id = input('TASK U NEED TO UPDATE (ID): ')
 	if int(task_id) == -99:
 		main()
 	viewRemind()
@@ -106,7 +106,9 @@ def updateReminder(): # Updation of TASKS already exist
 			WHERE id =?''', \
 			(remind_content, str(datetime.now()).split('.')[0], combined_date, task_id))
 	connection.commit()
-		
+	viewRemind()
+
+
 def main():
 	createTable()
 	banner()
