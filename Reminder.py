@@ -21,15 +21,15 @@ def banner(): # Banner
 		
 def createTable(): # If a table donot exist then, creates a table and if exist then wont overwrite
 	cursor.executescript('''CREATE TABLE \
-							IF NOT EXISTS reminder \
-							(id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, \
-							title TEXT, create_date TEXT, remind_date TEXT);''')
+				IF NOT EXISTS reminder \
+				(id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, \
+				title TEXT, create_date TEXT, remind_date TEXT);''')
 
 
 def insertRemind(rem_name, rem_date): # Function for data insertion 
 	cursor.execute('''INSERT OR IGNORE INTO reminder \
-					(title, create_date, remind_date) VALUES  ( ?, ?, ? )''', \
-				    (rem_name, str(datetime.now()).split('.')[0], rem_date)) 
+			(title, create_date, remind_date) VALUES  ( ?, ?, ? )''', \
+			(rem_name, str(datetime.now()).split('.')[0], rem_date)) 
 	connection.commit()
 
 
@@ -102,9 +102,9 @@ def updateReminder(): # Updation of TASKS already exist
 	full_time = time(int(remind_hour), int(remind_mind))
 	combined_date = datetime.combine(full_date, full_time)
 	cursor.execute('''UPDATE reminder SET title = ?, \
-					create_date = ?, remind_date = ? \
-					WHERE id =?''', \
-					(remind_content, str(datetime.now()).split('.')[0], combined_date, task_id))
+			create_date = ?, remind_date = ? \
+			WHERE id =?''', \
+			(remind_content, str(datetime.now()).split('.')[0], combined_date, task_id))
 	connection.commit()
 		
 def main():
