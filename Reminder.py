@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 # Author: Goldy T Joseph
 # Mail: goldythundiyiljoseph@gmail.com
 # Remind Me is a reminder application.
@@ -12,24 +11,21 @@ import sqlite3 as sql
 from datetime import datetime, date, time
 
 
-# Make sqlite3 database connection
-DB_NAME = 'reminder_db.db'
+DB_NAME = 'reminder_db.db' # Make sqlite3 database connection
 CONN = sql.connect(DB_NAME)
 cursor = CONN.cursor()
 
 
-# Banner
-def banner():
+def banner(): # Banner
 	print(r'''
-	88''Yb 888888 8b    d8 88 88b 88 8888b.  888888 88''Yb 
-	88__dP 88__   88b  d88 88 88Yb88  8I  Yb 88__   88__dP 
-	88''Yb 88''   88YbdP88 88 88 Y88  8I  dY 88''   88''Yb  
-	88  Yb 888888 88 YY 88 88 88  Y8 8888Y'  888888 88  Yb 
+	88''Yb 888888 8b    d8 88 88b 88 8888b. 888888 88''Yb 
+	88__dP 88__   88b  d88 88 88Yb88  8I Yb 88__   88__dP 
+	88''Yb 88''   88YbdP88 88 88 Y88  8I dY 88''   88''Yb  
+	88  Yb 888888 88 YY 88 88 88  Y8 8888Y' 888888 88  Yb 
 	''')
 
 		
-# If a table donot exist then, creates a table and if exist then wont overwrite
-def createTable():
+def createTable(): # If a table donot exist then, creates a table and if exist then wont overwrite
 	cursor.executescript('''
 		CREATE TABLE IF NOT EXISTS reminder (
     	id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -39,16 +35,14 @@ def createTable():
 		''')
 
 
-# Function for data insertion 
-def insertRemind(rem_name, rem_date):
+def insertRemind(rem_name, rem_date): # Function for data insertion 
 	cursor.execute('''INSERT OR IGNORE INTO reminder (
 		title, create_date, remind_date) 
         VALUES ( ?, ?, ? )''', ( rem_name, str(datetime.now()).split('.')[0], rem_date)) 
 	CONN.commit()
 
 
-# Reminder creation function
-def createReminder():
+def createReminder(): # Reminder creation function
 	os.system('clear')
 	current_year = datetime.now().year	
 	remind_content = input('Reminder about: ')
@@ -66,19 +60,15 @@ def createReminder():
 		updateReminder()
 	remind_hour = input('Hour (eg. 1-12)? ')
 	remind_mind = input('Minute (eg. 0-59)? ')
-	# get full date like year, month, day
-	full_date = date(int(remind_year), int(remind_month), int(remind_day))
-	# get the full time like hour and minutes
-	full_time = time(int(remind_hour), int(remind_mind))
-	# combined date and time 
-	combined_date = datetime.combine(full_date, full_time)
+	full_date = date(int(remind_year), int(remind_month), int(remind_day)) # get full date like year, month, day
+	full_time = time(int(remind_hour), int(remind_mind)) 	# get the full time like hour and minutes
+	combined_date = datetime.combine(full_date, full_time) 	# combined date and time 
 	print('Reminder added for:',combined_date)
 	print('Created at',str(datetime.now()))
 	insertRemind(remind_content, combined_date)
 
 
-# For viewing and deleting (specific reminder)
-def viewRemind(rec=0):
+def viewRemind(rec=0): # For viewing and deleting (specific reminder)
 	if rec == 0:
 		os.system('clear')
 		cursor.execute('SELECT *FROM reminder')
@@ -100,9 +90,7 @@ def viewRemind(rec=0):
 			print('{0:5} {1:20} {2:25} {3:5} '.format(item[0], item[1], item[2], item[3]))
 
 
-# Updation of TASKS already exist
-def updateReminder():
-	#os.system('clear')
+def updateReminder(): # Updation of TASKS already exist
 	current_year = datetime.now().year
 	print('DONT NEED TO UPDATE ??? ')
 	task_id = input('TASK U NEED TO UPDATE (ID) ')
