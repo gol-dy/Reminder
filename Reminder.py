@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Goldy T Joseph
-# Mail: goldythundiyiljoseph@gmail.com
-# Remind Me is a reminder application.
+# Contributors: Goldy T Joseph, Ajil Raju
+# Reminder is a project under maintainence which is created as reminder application.
 
 
 import os
