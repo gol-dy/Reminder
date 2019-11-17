@@ -10,47 +10,40 @@ import sqlite3 as sql
 from datetime import datetime, date, time
 
 
-DB_NAME = 'reminder_db.db' # Make sqlite3 database connection
-CONN = sql.connect(DB_NAME)
-cursor = CONN.cursor()
+DB_NAME = 'reminder.db' # Make sqlite3 database connection
+connection = sql.connect(DB_NAME)
+cursor = connection.cursor()
 
 
 def banner(): # Banner
-	print(r'''
-	88''Yb 888888 8b    d8 88 88b 88 8888b. 888888 88''Yb 
-	88__dP 88__   88b  d88 88 88Yb88  8I Yb 88__   88__dP 
-	88''Yb 88''   88YbdP88 88 88 Y88  8I dY 88''   88''Yb  
-	88  Yb 888888 88 YY 88 88 88  Y8 8888Y' 888888 88  Yb 
-	''')
+	print('REMINDER')
 
 		
 def createTable(): # If a table donot exist then, creates a table and if exist then wont overwrite
-	cursor.executescript('''
-		CREATE TABLE IF NOT EXISTS reminder (
-    	id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    	title TEXT,
-		create_date TEXT,
-		remind_date TEXT);
-		''')
+	cursor.executescript('''CREATE TABLE \
+							IF NOT EXISTS reminder \
+							(id  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, \
+							title TEXT, create_date TEXT, remind_date TEXT);''')
 
 
 def insertRemind(rem_name, rem_date): # Function for data insertion 
-	cursor.execute('''INSERT OR IGNORE INTO reminder (
-		title, create_date, remind_date) 
-        VALUES ( ?, ?, ? )''', ( rem_name, str(datetime.now()).split('.')[0], rem_date)) 
-	CONN.commit()
+	cursor.execute('''INSERT OR IGNORE INTO reminder \
+					(title, create_date, remind_date) VALUES  ( ?, ?, ? )''', \
+				    (rem_name, str(datetime.now()).split('.')[0], rem_date)) 
+	connection.commit()
 
 
 def createReminder(): # Reminder creation function
 	os.system('clear')
-	current_year = datetime.now().year	
+	current_year = datetime.now().year
+	current_month = datetime.now().month	
 	remind_content = input('Reminder about: ')
 	remind_year = input('Set reminder at (year, eg. 2019)?: ')
 	if int(remind_year) < current_year:
 		input('This is not valid because the year less current year...! [Press ENTER]')
 		updateReminder()
 	remind_month = input('In which month (eg. 1-12)? ')
-	if int(remind_month) > 12:
+	if int(remind_month) > 12 and int(remind_month) < current_month:
 		input('This selection is not valid...! [Press ENTER]')
 		updateReminder()
 	remind_day = input('On which day (eg. 1-31)? ')
@@ -72,15 +65,14 @@ def viewRemind(rec=0): # For viewing and deleting (specific reminder)
 		os.system('clear')
 		cursor.execute('SELECT *FROM reminder')
 		data = cursor.fetchall()
-		print('{0:5} {1:20} {2:25} {3:5} '.format('|id|', '|title|', '|   created date  |',
-				'|   remind date   |'))
+		print('{0:5} {1:20} {2:25} {3:5} '.format('|id|', '|title|', '|created date|', '|remind date|'))
 		print('{0:5} {1:20} {2:25} {3:5} '.format('-'*4, '-'*7, '-'*19, '-'*19))
 		for item in data:
 			print('{0:5} {1:20} {2:25} {3:5} '.format(str(item[0]), item[1], item[2], item[3]))	
 	else:
 		os.system('clear')
 		cursor.execute('DELETE FROM reminder WHERE id = ?', (rec, ))
-		CONN.commit()
+		connection.commit()
 		cursor.execute('SELECT *FROM reminder')
 		data = cursor.fetchall()
 		print('{0:5} {1:20} {2:25} {3:5}'.format('|id|', '|title|', '|created date|', '|remind date|'))
@@ -109,16 +101,11 @@ def updateReminder(): # Updation of TASKS already exist
 	full_date = date(int(remind_year), int(remind_month), int(remind_day))
 	full_time = time(int(remind_hour), int(remind_mind))
 	combined_date = datetime.combine(full_date, full_time)
-	cursor.execute('''UPDATE reminder 
-					SET title = ?,
-					create_date = ?,
-					remind_date = ? 
-					WHERE id =?''',
-					(remind_content, 
-						str(datetime.now()).split('.')[0],
-						combined_date,
-						task_id)) 
-	CONN.commit()
+	cursor.execute('''UPDATE reminder SET title = ?, \
+					create_date = ?, remind_date = ? \
+					WHERE id =?''', \
+					(remind_content, str(datetime.now()).split('.')[0], combined_date, task_id))
+	connection.commit()
 		
 def main():
 	createTable()
